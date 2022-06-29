@@ -1,0 +1,25 @@
+version: "3.3"
+
+services:
+
+  traefik:
+    platform: "linux/x86_64"
+    image: "traefik:v2.7"
+    container_name: "traefik"
+    ports:
+      - "80:80"
+      - "8080:8080"
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./traefik.yaml:/etc/traefik/traefik.yaml"
+      - "./dynamic.yaml:/etc/traefik/dynamic/config.yaml"
+
+  httpbin:
+    platform: "linux/x86_64"
+    image: "kennethreitz/httpbin"
+    container_name: "httpbin"
+
+  echo:
+    platform: "linux/x86_64"
+    image: "ealen/echo-server:latest"
+    container_name: "echo"

@@ -1,0 +1,42 @@
+# Dynamic configuration file
+# Note: entry point described in static configuration file
+http:
+  services:
+    mirrored-api:
+      mirroring:
+        service: "httpbin"
+        mirrors:
+          - name: "wallarm"
+            percent: 100
+
+    wallarm:
+      loadBalancer:
+        servers:
+          - url: "${WALLARM_ALB_URL}:${WALLARM_ALB_PORT}/"
+    httpbin:
+      loadBalancer:
+        servers:
+          - url: "http://httpbin:80/"
+    echo:
+      loadBalancer:
+        servers:
+          - url: "http://echo:80/"
+
+  routers:
+    Router-1:
+      entryPoints:
+        - "web"
+      rule: "Host(`httpbin.local`)"
+      service: "mirrored-api"
+
+    Router-2:
+      entryPoints:
+        - "web"
+      rule: "Host(`echo.local`)"
+      service: "echo"
+
+    Router-3:
+      entryPoints:
+        - "web"
+      rule: "Host(`wallarm.local`)"
+      service: "wallarm"

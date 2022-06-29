@@ -1,0 +1,18 @@
+api:
+  insecure: true
+  dashboard: true
+  debug: true
+
+providers:
+  file:
+    directory: /etc/traefik/dynamic
+    filename: config.yaml
+    watch: true
+
+entryPoints:
+  web:
+    address: ":80"
+
+log:
+  level: DEBUG
+  format: text
