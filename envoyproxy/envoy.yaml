@@ -42,8 +42,8 @@ static_resources:
         - endpoint:
             address:
               socket_address:
-                address: wallarm-tmyhg-660407312.eu-west-2.elb.amazonaws.com
-                port_value: 8445
+                address: ${WALLARM_ALB_FQDN}
+                port_value: ${WALLARM_ALB_PORT}
 
   - name: httpbin
     type: STRICT_DNS
