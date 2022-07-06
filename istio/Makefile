@@ -17,9 +17,9 @@ deploy_istio:
 
 deploy_demo:
 	yq -e -i '.spec.hosts[0] = "$(WALLARM_ALB_HOST)"' resources/istio-service-entry.yaml
-	yq -e -i '.spec.ports[0].number = "$(WALLARM_ALB_PORT)"' resources/istio-service-entry.yaml
+	yq -e -i '.spec.ports[0].number = $(WALLARM_ALB_PORT)' resources/istio-service-entry.yaml
 	yq -e -i '.spec.http[0].mirror.host = "$(WALLARM_ALB_HOST)"' resources/istio-virtual-service.yaml
-	yq -e -i '.spec.http[0].mirror.port.number = "$(WALLARM_ALB_PORT)"' resources/istio-virtual-service.yaml
+	yq -e -i '.spec.http[0].mirror.port.number = $(WALLARM_ALB_PORT)' resources/istio-virtual-service.yaml
 	kubectl apply -k resources
 	kubectl wait --for=condition=Ready pods --all --namespace wallarm-demo --timeout 5m0s
 
