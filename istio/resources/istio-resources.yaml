@@ -1,0 +1,55 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: httpbin-gateway
+  namespace: wallarm-demo
+spec:
+  selector:
+    istio: ingress
+    app: istio-ingress
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "*"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: httpbin
+  namespace: wallarm-demo
+spec:
+  hosts:
+  - "*"
+  gateways:
+  - httpbin-gateway
+  http:
+  - route:
+    - destination:
+        host: httpbin
+        port:
+          number: 80
+      weight: 100
+    mirror:
+      host: wallarm-tmyhg-660407312.eu-west-2.elb.amazonaws.com
+      port:
+        number: 8445
+---
+apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: wallarm-external-svc
+  namespace: wallarm-demo
+spec:
+  hosts:
+  - wallarm-tmyhg-660407312.eu-west-2.elb.amazonaws.com
+  location: MESH_EXTERNAL
+  ports:
+  - number: 8445
+    name: http
+    protocol: HTTP
+  resolution: DNS
+
+

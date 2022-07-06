@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: httpbin
+  namespace: wallarm-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: httpbin
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: httpbin
+        version: v1
+    spec:
+      containers:
+      - image: docker.io/kennethreitz/httpbin
+        imagePullPolicy: IfNotPresent
+        name: httpbin
+        command: ["gunicorn", "--access-logfile", "-", "-b", "0.0.0.0:80", "httpbin:app"]
+        ports:
+        - name: http
+          containerPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: curl
+  namespace: wallarm-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: curl
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: curl
+        version: v1
+    spec:
+      containers:
+        - image: docker.io/alpine/curl
+          imagePullPolicy: IfNotPresent
+          name: curl
+          command:
+            - sleep
+            - infinity
+          ports:
+            - name: http
+              containerPort: 80
