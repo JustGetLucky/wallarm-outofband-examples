@@ -1,0 +1,21 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: httpbin
+  namespace: wallarm-demo
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - httpbin-gateway
+  http:
+    - route:
+        - destination:
+            host: httpbin
+            port:
+              number: 80
+          weight: 100
+      mirror:
+        host: ${WALLARM_ALB_HOST}
+        port:
+          number: ${WALLARM_ALB_PORT}

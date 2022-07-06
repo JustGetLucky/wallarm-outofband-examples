@@ -1,0 +1,14 @@
+apiVersion: networking.istio.io/v1beta1
+kind: ServiceEntry
+metadata:
+  name: wallarm-external-svc
+  namespace: wallarm-demo
+spec:
+  hosts:
+    - ${WALLARM_ALB_HOST}
+  location: MESH_EXTERNAL
+  ports:
+    - number: ${WALLARM_ALB_PORT}
+      name: http
+      protocol: HTTP
+  resolution: DNS
