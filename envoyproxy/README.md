@@ -1,8 +1,8 @@
 # Example of using Wallarm mirroring solution with Envoy
 
 All traffic which goes to `httpbin` cluster will be mirrored to `wallarm` cluster.
-NOTE: Replace `${WALLARM_ALB_FQDN}` and `${WALLARM_ALB_PORT}` with appropriate values of Internal ALB DNS name and port from outputs of [Terraform module](https://registry.terraform.io/modules/wallarm/wallarm/aws/0.9.1?tab=outputs).
-`${WALLARM_ALB_FQDN}` should be FQDN and not URL, e.g. `wallarm-alb.myinternalzone.local`
+NOTE: Replace `${WALLARM_ALB_HOST}` and `${WALLARM_ALB_PORT}` with appropriate values of Internal ALB DNS name and port from outputs of [Terraform module](https://registry.terraform.io/modules/wallarm/wallarm/aws/0.9.1?tab=outputs).
+`${WALLARM_ALB_HOST` should be FQDN, e.g. `wallarm-alb.myinternalzone.local`
 
 Envoy configuration file example:
 ```
@@ -48,7 +48,7 @@ static_resources:
         - endpoint:
             address:
               socket_address:
-                address: ${WALLARM_ALB_FQDN}
+                address: http://${WALLARM_ALB_HOST}
                 port_value: ${WALLARM_ALB_PORT}
   - name: httpbin
     type: STRICT_DNS

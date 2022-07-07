@@ -2,7 +2,6 @@ apiVersion: networking.istio.io/v1alpha3
 kind: Gateway
 metadata:
   name: httpbin-gateway
-  namespace: wallarm-demo
 spec:
   selector:
     istio: ingress
@@ -13,4 +12,4 @@ spec:
       name: http
       protocol: HTTP
     hosts:
-    - "*"
+    - "httpbin.local"

@@ -11,8 +11,12 @@ deploy_istio:
 	helm install istio-base istio/base -n istio-system --wait --create-namespace
 	helm install istiod istio/istiod -n istio-system --wait
 	helm install istio-ingress istio/gateway -f istio.yaml -n istio-system --wait
+	kubectl wait --for=condition=Ready pods --all --namespace istio-system --timeout 5m0s
+
+deploy_addons:
 	kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.14/samples/addons/prometheus.yaml
 	kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.14/samples/addons/kiali.yaml
+	kubectl apply -f https://raw.githubusercontent.com/istio/istio/release-1.14/samples/addons/jaeger.yaml
 	kubectl wait --for=condition=Ready pods --all --namespace istio-system --timeout 5m0s
 
 deploy_demo:
